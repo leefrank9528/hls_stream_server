@@ -127,7 +127,7 @@ with GstContext():  # create GstContext (hides MainLoop)
         duration = 10 ** 9 / (FPS.numerator / FPS.denominator)  # frame duration
         # for _ in range(NUM_BUFFERS):
         while cap.isOpened():
-            ret, array = cap.read()
+            ret, frame = cap.read()
             if not ret:
                 break
             # create random np.ndarray
@@ -135,6 +135,7 @@ with GstContext():  # create GstContext (hides MainLoop)
             #                           size=(HEIGHT, WIDTH, CHANNELS), dtype=DTYPE)
 
             # convert np.ndarray to Gst.Buffer
+            array = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             gst_buffer = utils.ndarray_to_gst_buffer(array)
 
             # set pts and duration to be able to record video, calculate fps
